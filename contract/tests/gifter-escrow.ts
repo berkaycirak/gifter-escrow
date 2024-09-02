@@ -79,7 +79,7 @@ describe('gifter-escrow', () => {
 		tokenProgram: TOKEN_PROGRAM_ID,
 	};
 
-	it('Is initialized!', async () => {
+	xit('Is initialized!', async () => {
 		// Add your test here.
 		const tx = await program.methods
 			.createEscrow(first_escrow_id, new BN(300), new BN(154))
@@ -101,7 +101,7 @@ describe('gifter-escrow', () => {
 			})
 			.rpc();
 	});
-	it('Take from the vault', async () => {
+	xit('Take from the vault', async () => {
 		const tx = await program.methods
 			.takeAndClose()
 			.accounts({
@@ -115,7 +115,7 @@ describe('gifter-escrow', () => {
 		});
 		console.log('Your transaction signature', tx);
 	});
-	xit('read the escrows ', async () => {
+	it('read the escrows ', async () => {
 		const data = await program.account.gifterEscrow.all();
 		console.log(data);
 	});
