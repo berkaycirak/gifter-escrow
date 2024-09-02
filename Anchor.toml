@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-reward_escrow = "66SrAUSNeDe2Fzk6jgHpjT6LL1Po9Cans8iWnEU66VmJ"
+gifter_escrow = "BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5"
 
 [registry]
 url = "https://api.apr.dev"

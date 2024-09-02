@@ -22,7 +22,7 @@ impl Space for GifterEscrow {
 }
 
 
-#[account]
+#[event]
 pub struct CompleteEvent{
     pub maker:Pubkey,
     pub taker:Pubkey

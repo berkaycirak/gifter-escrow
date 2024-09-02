@@ -1,5 +1,5 @@
 use::anchor_lang::prelude::*;
-use anchor_spl::{associated_token::AssociatedToken, token::{transfer_checked, TransferChecked}, token_interface::{Mint, TokenAccount, TokenInterface}};
+use anchor_spl::{associated_token::AssociatedToken, token_interface::{Mint, TokenAccount, TokenInterface,transfer_checked, TransferChecked}};
 
 
 use crate::GifterEscrow;
@@ -7,19 +7,12 @@ use crate::GifterEscrow;
 #[derive(Accounts)]
 #[instruction(escrow_id:u64)]
 pub struct Create<'info>{
-    #[account(
-        mut
-    )]
+    #[account(mut)]
     pub maker:Signer<'info>, // maker will be the signer of the transaction during initialization of escrow.
-    #[account(
-        mint::token_program = token_program
-    )]
+    #[account(mint::token_program = token_program)]
     pub mint_a: InterfaceAccount<'info,Mint>,
-    #[account(
-        mint::token_program = token_program
-    )]
+    #[account(mint::token_program = token_program)]
     pub mint_b: InterfaceAccount<'info,Mint>,
-
     #[account(
         mut,
         associated_token::mint = mint_a,
@@ -28,20 +21,14 @@ pub struct Create<'info>{
 
     )]
     pub maker_token_account_a:InterfaceAccount<'info,TokenAccount>, // Since maker will deposit to the escrow vault, we need that account
-
-    
-     
     #[account(
         init, // escrow state will be initialized first
         payer=maker,
         space=GifterEscrow::INIT_SPACE,
         seeds=[b"gifter_escrow",maker.key().as_ref(),escrow_id.to_le_bytes().as_ref()], // One maker can have multiple escrows on the platform, so we pass escrow_id to the seeds also (little endian ).
         bump
-        
-
     )]
     pub gifter_escrow_state:Account<'info,GifterEscrow>,
-
     #[account(
         init,
         payer=maker,
@@ -51,8 +38,6 @@ pub struct Create<'info>{
 
     )]
     pub escrow_vault:InterfaceAccount<'info,TokenAccount>, // The vault is the token account of gifter_escrow_state in which deposited tokens can be transffered to the takers.
-
-
     pub system_program:Program<'info,System>,
     pub associated_token_program:Program<'info,AssociatedToken>,
     pub token_program:Interface<'info,TokenInterface>
@@ -83,7 +68,7 @@ impl<'info> Create<'info> {
 
     pub fn deposit_to_escrow_vault(&mut self,deposit_amount:u64)->Result<()>{
 
-        // Since the spl-token transfer will be handled here, our escrow program needs to invoke spl-token program's transfer method. Here cpi is occuring.
+        // Since the spl-token transfer will be handled here, our escrow program needs to invoke spl-token program's transfer method. Here _cpi_ is occuring.
 
         let accounts = TransferChecked {
             authority:self.maker.to_account_info(),

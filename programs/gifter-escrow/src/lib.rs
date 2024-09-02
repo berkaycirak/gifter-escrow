@@ -6,7 +6,7 @@ use context::*;
 mod state;
 use state::*;
 
-declare_id!("66SrAUSNeDe2Fzk6jgHpjT6LL1Po9Cans8iWnEU66VmJ");
+declare_id!("BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5");
 
 #[program]
 pub mod gifter_escrow {
@@ -26,13 +26,17 @@ pub mod gifter_escrow {
     }
 
     pub fn refund(ctx:Context<Refund>)-> Result<()>{
-
+        ctx.accounts.withdraw_from_vault()?;
+        msg!("You have refunded all funds in the vault, and vault is closed {}", ctx.program_id.to_string());
         Ok(())
     }
     
 
     pub fn take_and_close(ctx:Context<Take>)-> Result<()>{
-
+        ctx.accounts.send_to_maker()?;
+        msg!("Taker sent tokens to the maker succesfully {}", ctx.program_id.to_string());
+        ctx.accounts.take_from_vault()?;
+        msg!("Taker get tokens from the vault succesfully {}", ctx.program_id.to_string());
         Ok(())
     }
 
