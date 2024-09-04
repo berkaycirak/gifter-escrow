@@ -2,6 +2,7 @@ import * as anchor from '@coral-xyz/anchor';
 import { Program, BN } from '@coral-xyz/anchor';
 import { GifterEscrow } from '../target/types/gifter_escrow';
 import {
+	Connection,
 	Keypair,
 	LAMPORTS_PER_SOL,
 	PublicKey,
@@ -9,30 +10,49 @@ import {
 import { TOKEN_PROGRAM_ID } from '@coral-xyz/anchor/dist/cjs/utils/token';
 import { getAssociatedTokenAddressSync } from '@solana/spl-token';
 import takerWallet from '../wallet/taker.json';
+import makerWallet from '../wallet/maker.json';
 
 describe('gifter-escrow', () => {
+	const taker = Keypair.fromSecretKey(new Uint8Array(takerWallet));
+	const maker = Keypair.fromSecretKey(new Uint8Array(makerWallet));
+
+	const connection = new Connection(
+		'https://devnet.helius-rpc.com/?api-key=8c2c9f64-3f11-4ff3-9909-2defbecc4447',
+		{
+			wsEndpoint:
+				'wss://devnet.helius-rpc.com/?api-key=8c2c9f64-3f11-4ff3-9909-2defbecc4447',
+		}
+	);
+
+	const provider = new anchor.AnchorProvider(
+		connection,
+		new anchor.Wallet(maker),
+		{
+			commitment: 'confirmed',
+		}
+	);
+
 	// Configure the client to use the local cluster.
-	anchor.setProvider(anchor.AnchorProvider.env());
+	anchor.setProvider(provider);
 
 	const program = anchor.workspace
 		.GifterEscrow as Program<GifterEscrow>;
 
-	const first_escrow_id = new BN(12);
+	const first_escrow_id = new BN(6);
 	const mint_a = new PublicKey(
 		'7chEvNZDztDZYahhznCEgmuDVcmBEMtRZCKWVFAds78U'
 	);
 	const mint_b = new PublicKey(
 		'2GtJ857morRm9Rb6u3An3jhR4AhzkAAtyE3yTCyjaJ9Z'
 	);
-	const maker = new PublicKey(
-		'CRKdEBXEHPqWtfHc35hokC8G8nzg55VbgEcbW9fhqaXz'
-	);
-	const taker = Keypair.fromSecretKey(new Uint8Array(takerWallet));
+	// const maker = new PublicKey(
+	// 	'8JSYNX179Meg1htpjkTZJybhXe62rX2HS4UWiRLszk6B'
+	// );
 
 	const gifter_escrow_state_pda = PublicKey.findProgramAddressSync(
 		[
 			Buffer.from('gifter_escrow'),
-			maker.toBuffer(),
+			maker.publicKey.toBuffer(),
 			first_escrow_id.toArrayLike(Buffer, 'le', 8),
 		],
 		program.programId
@@ -46,13 +66,13 @@ describe('gifter-escrow', () => {
 	);
 	const maker_token_account_a = getAssociatedTokenAddressSync(
 		mint_a,
-		maker,
+		maker.publicKey,
 		true,
 		TOKEN_PROGRAM_ID
 	);
 	const maker_token_account_b = getAssociatedTokenAddressSync(
 		mint_b,
-		maker,
+		maker.publicKey,
 		true,
 		TOKEN_PROGRAM_ID
 	);
@@ -70,7 +90,7 @@ describe('gifter-escrow', () => {
 	);
 
 	const accounts = {
-		maker,
+		maker: maker.publicKey,
 		taker: taker.publicKey,
 		mintA: mint_a,
 		mintB: mint_b,
@@ -88,11 +108,11 @@ describe('gifter-escrow', () => {
 		const tx = await program.methods
 			.createEscrow(
 				first_escrow_id,
-				new BN(5 * 1e6),
-				new BN(10 * 1e6)
+				new BN(0.5 * 1e6),
+				new BN(0.5 * 1e6)
 			)
 			.accounts({
-				maker,
+				maker: maker.publicKey,
 				mintA: mint_a,
 				mintB: mint_b,
 				tokenProgram: TOKEN_PROGRAM_ID,

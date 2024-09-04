@@ -6,7 +6,7 @@ use context::*;
 mod state;
 use state::*;
 
-declare_id!("BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5");
+declare_id!("5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk");
 
 #[program]
 pub mod gifter_escrow {

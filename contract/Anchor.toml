@@ -4,16 +4,17 @@
 resolution = true
 skip-lint = false
 
-[programs.localnet]
-gifter_escrow = "BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5"
 [programs.devnet]
-gifter_escrow = "BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5"
+gifter_escrow = "5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk"
+
+[programs.localnet]
+gifter_escrow = "5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
