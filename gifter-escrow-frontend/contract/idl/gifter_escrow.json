@@ -1,14 +1,14 @@
-export type GifterEscrow = {
+ {
   "address": "BemBQbhhmECmafVvamPovEC51wT5h5qK4DvaNTd5p4u5",
   "metadata": {
-    "name": "gifter_escrow",
+    "name": "gifterEscrow",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
   "instructions": [
     {
-      "name": "create_escrow",
+      "name": "createEscrow",
       "discriminator": [
         253,
         215,
@@ -26,13 +26,13 @@ export type GifterEscrow = {
           "signer": true
         },
         {
-          "name": "mint_a"
+          "name": "mintA"
         },
         {
-          "name": "mint_b"
+          "name": "mintB"
         },
         {
-          "name": "maker_token_account_a",
+          "name": "makerTokenAccountA",
           "writable": true,
           "pda": {
             "seeds": [
@@ -42,11 +42,11 @@ export type GifterEscrow = {
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -89,7 +89,7 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "gifter_escrow_state",
+          "name": "gifterEscrowState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -117,27 +117,27 @@ export type GifterEscrow = {
               },
               {
                 "kind": "arg",
-                "path": "escrow_id"
+                "path": "escrowId"
               }
             ]
           }
         },
         {
-          "name": "escrow_vault",
+          "name": "escrowVault",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "gifter_escrow_state"
+                "path": "gifterEscrowState"
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -180,28 +180,28 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "token_program"
+          "name": "tokenProgram"
         }
       ],
       "args": [
         {
-          "name": "escrow_id",
+          "name": "escrowId",
           "type": "u64"
         },
         {
-          "name": "deposit_amount",
+          "name": "depositAmount",
           "type": "u64"
         },
         {
-          "name": "maker_expected_price",
+          "name": "makerExpectedPrice",
           "type": "u64"
         }
       ]
@@ -225,10 +225,10 @@ export type GifterEscrow = {
           "signer": true
         },
         {
-          "name": "mint_a"
+          "name": "mintA"
         },
         {
-          "name": "maker_token_account_a",
+          "name": "makerTokenAccountA",
           "writable": true,
           "pda": {
             "seeds": [
@@ -238,11 +238,11 @@ export type GifterEscrow = {
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -285,7 +285,7 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "gifter_escrow_state",
+          "name": "gifterEscrowState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -314,27 +314,27 @@ export type GifterEscrow = {
               {
                 "kind": "account",
                 "path": "gifter_escrow_state.escrow_id",
-                "account": "GifterEscrow"
+                "account": "gifterEscrow"
               }
             ]
           }
         },
         {
-          "name": "escrow_vault",
+          "name": "escrowVault",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "gifter_escrow_state"
+                "path": "gifterEscrowState"
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -377,21 +377,21 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "token_program"
+          "name": "tokenProgram"
         }
       ],
       "args": []
     },
     {
-      "name": "take_and_close",
+      "name": "takeAndClose",
       "discriminator": [
         81,
         156,
@@ -413,13 +413,13 @@ export type GifterEscrow = {
           "signer": true
         },
         {
-          "name": "mint_a"
+          "name": "mintA"
         },
         {
-          "name": "mint_b"
+          "name": "mintB"
         },
         {
-          "name": "maker_token_account_b",
+          "name": "makerTokenAccountB",
           "writable": true,
           "pda": {
             "seeds": [
@@ -429,11 +429,11 @@ export type GifterEscrow = {
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_b"
+                "path": "mintB"
               }
             ],
             "program": {
@@ -476,7 +476,7 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "taker_token_account_a",
+          "name": "takerTokenAccountA",
           "writable": true,
           "pda": {
             "seeds": [
@@ -486,11 +486,11 @@ export type GifterEscrow = {
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -533,7 +533,7 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "taker_token_account_b",
+          "name": "takerTokenAccountB",
           "writable": true,
           "pda": {
             "seeds": [
@@ -543,11 +543,11 @@ export type GifterEscrow = {
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_b"
+                "path": "mintB"
               }
             ],
             "program": {
@@ -590,7 +590,7 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "gifter_escrow_state",
+          "name": "gifterEscrowState",
           "writable": true,
           "pda": {
             "seeds": [
@@ -619,27 +619,27 @@ export type GifterEscrow = {
               {
                 "kind": "account",
                 "path": "gifter_escrow_state.escrow_id",
-                "account": "GifterEscrow"
+                "account": "gifterEscrow"
               }
             ]
           }
         },
         {
-          "name": "escrow_vault",
+          "name": "escrowVault",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "gifter_escrow_state"
+                "path": "gifterEscrowState"
               },
               {
                 "kind": "account",
-                "path": "token_program"
+                "path": "tokenProgram"
               },
               {
                 "kind": "account",
-                "path": "mint_a"
+                "path": "mintA"
               }
             ],
             "program": {
@@ -682,15 +682,15 @@ export type GifterEscrow = {
           }
         },
         {
-          "name": "system_program",
+          "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "associated_token_program",
+          "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "token_program"
+          "name": "tokenProgram"
         }
       ],
       "args": []
@@ -698,7 +698,7 @@ export type GifterEscrow = {
   ],
   "accounts": [
     {
-      "name": "GifterEscrow",
+      "name": "gifterEscrow",
       "discriminator": [
         233,
         223,
@@ -713,7 +713,7 @@ export type GifterEscrow = {
   ],
   "events": [
     {
-      "name": "CompleteEvent",
+      "name": "completeEvent",
       "discriminator": [
         95,
         114,
@@ -728,7 +728,7 @@ export type GifterEscrow = {
   ],
   "types": [
     {
-      "name": "CompleteEvent",
+      "name": "completeEvent",
       "type": {
         "kind": "struct",
         "fields": [
@@ -744,16 +744,16 @@ export type GifterEscrow = {
       }
     },
     {
-      "name": "GifterEscrow",
+      "name": "gifterEscrow",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "escrow_id",
+            "name": "escrowId",
             "type": "u64"
           },
           {
-            "name": "maker_expected_price",
+            "name": "makerExpectedPrice",
             "type": "u64"
           },
           {
@@ -761,11 +761,11 @@ export type GifterEscrow = {
             "type": "pubkey"
           },
           {
-            "name": "mint_a",
+            "name": "mintA",
             "type": "pubkey"
           },
           {
-            "name": "mint_b",
+            "name": "mintB",
             "type": "pubkey"
           },
           {
@@ -776,4 +776,4 @@ export type GifterEscrow = {
       }
     }
   ]
-};
+}

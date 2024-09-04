@@ -103,6 +103,12 @@ impl<'info> Take<'info> {
         // All mint_a token amount on the vault will be transferred to the taker.
         transfer_checked(cpi_context, self.escrow_vault.amount, self.mint_a.decimals)?;
 
+         
+         emit!(CompleteEvent{
+            maker:self.maker.key(),
+            taker:self.taker.key()
+        });
+
         // After all tokens are transferred, we should close the vault since there is no need to exist with empty data. To do that, we should also invoke the spl token program's close method. CPI is here
         let accounts = CloseAccount {
           account:self.escrow_vault.to_account_info(),
@@ -114,11 +120,7 @@ impl<'info> Take<'info> {
 
         close_account(cpi_context)?;
 
-        // We should emit "escrow done" event to catch from the RPC and then we will give reward tokens for both maker and taker
-        emit!(CompleteEvent{
-            maker:self.maker.key(),
-            taker:self.taker.key()
-        });
+       
 
         Ok(())
 

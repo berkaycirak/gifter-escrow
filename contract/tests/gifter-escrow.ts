@@ -1,7 +1,11 @@
 import * as anchor from '@coral-xyz/anchor';
 import { Program, BN } from '@coral-xyz/anchor';
 import { GifterEscrow } from '../target/types/gifter_escrow';
-import { Keypair, PublicKey } from '@solana/web3.js';
+import {
+	Keypair,
+	LAMPORTS_PER_SOL,
+	PublicKey,
+} from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID } from '@coral-xyz/anchor/dist/cjs/utils/token';
 import { getAssociatedTokenAddressSync } from '@solana/spl-token';
 import takerWallet from '../wallet/taker.json';
@@ -13,12 +17,12 @@ describe('gifter-escrow', () => {
 	const program = anchor.workspace
 		.GifterEscrow as Program<GifterEscrow>;
 
-	const first_escrow_id = new BN(1);
+	const first_escrow_id = new BN(12);
 	const mint_a = new PublicKey(
-		'2JaHTxCbb1vcRvUHVHXxQX4uLf8Yz4yanXxRmo2fcsdL'
+		'7chEvNZDztDZYahhznCEgmuDVcmBEMtRZCKWVFAds78U'
 	);
 	const mint_b = new PublicKey(
-		'EKTg84GKJydViQuAym1YpY3wqiH4NJxVh56U8Kd3DTqJ'
+		'2GtJ857morRm9Rb6u3An3jhR4AhzkAAtyE3yTCyjaJ9Z'
 	);
 	const maker = new PublicKey(
 		'CRKdEBXEHPqWtfHc35hokC8G8nzg55VbgEcbW9fhqaXz'
@@ -79,10 +83,14 @@ describe('gifter-escrow', () => {
 		tokenProgram: TOKEN_PROGRAM_ID,
 	};
 
-	xit('Is initialized!', async () => {
+	it('Is initialized!', async () => {
 		// Add your test here.
 		const tx = await program.methods
-			.createEscrow(first_escrow_id, new BN(300), new BN(154))
+			.createEscrow(
+				first_escrow_id,
+				new BN(5 * 1e6),
+				new BN(10 * 1e6)
+			)
 			.accounts({
 				maker,
 				mintA: mint_a,
@@ -101,7 +109,10 @@ describe('gifter-escrow', () => {
 			})
 			.rpc();
 	});
-	xit('Take from the vault', async () => {
+	it('Take from the vault', async () => {
+		program.addEventListener('completeEvent', (e) => {
+			console.log(e.maker.toBase58());
+		});
 		const tx = await program.methods
 			.takeAndClose()
 			.accounts({
@@ -110,9 +121,6 @@ describe('gifter-escrow', () => {
 			.signers([taker])
 			.rpc();
 
-		program.addEventListener('completeEvent', (e) => {
-			console.log(e);
-		});
 		console.log('Your transaction signature', tx);
 	});
 	it('read the escrows ', async () => {
