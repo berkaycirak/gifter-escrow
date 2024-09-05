@@ -13,10 +13,7 @@ import {
 } from '@solana/web3.js';
 
 import { BN, Program } from '@coral-xyz/anchor';
-import {
-  deriveEscrowVaultPDA,
-  deriveGifterEscrowStatePDA,
-} from '../accounts/pda';
+
 import { GifterEscrow } from '../idl/gifter_escrow';
 
 const create_escrow = async (
@@ -30,15 +27,6 @@ const create_escrow = async (
   connection: Connection,
 ) => {
   try {
-    // const makerTokenAccountA = await getAssociatedTokenAddress(
-    //   mintA,
-    //   maker,
-    //   true,
-    //   TOKEN_PROGRAM_ID,
-    // );
-    // const escrowVault = deriveEscrowVaultPDA(mintA);
-    // const gifterEscrowState = deriveGifterEscrowStatePDA(maker, escrow_id);
-
     const gifterEscrowState = PublicKey.findProgramAddressSync(
       [
         Buffer.from('gifter_escrow'),

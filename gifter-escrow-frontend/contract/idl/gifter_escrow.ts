@@ -1,5 +1,5 @@
 export type GifterEscrow = {
-  address: '5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk';
+  address: '9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf';
   metadata: {
     name: 'gifterEscrow';
     version: '0.1.0';
@@ -724,6 +724,10 @@ export type GifterEscrow = {
             type: 'pubkey';
           },
           {
+            name: 'depositAmount';
+            type: 'u64';
+          },
+          {
             name: 'bump';
             type: 'u8';
           },
@@ -734,7 +738,7 @@ export type GifterEscrow = {
 };
 
 export const IDL: GifterEscrow = {
-  address: '5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk',
+  address: '9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf',
   metadata: {
     name: 'gifterEscrow',
     version: '0.1.0',
@@ -1189,6 +1193,10 @@ export const IDL: GifterEscrow = {
           {
             name: 'mintB',
             type: 'pubkey',
+          },
+          {
+            name: 'depositAmount',
+            type: 'u64',
           },
           {
             name: 'bump',

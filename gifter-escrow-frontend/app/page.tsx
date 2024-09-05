@@ -21,12 +21,9 @@ import useWalletTokens from '@/hooks/useWalletTokens';
 import TokenSelectionForm from '@/components/shared/TokenSelectionForm';
 
 export default function Home() {
-  const mintA = new PublicKey('7chEvNZDztDZYahhznCEgmuDVcmBEMtRZCKWVFAds78U');
-  const mintB = new PublicKey('2GtJ857morRm9Rb6u3An3jhR4AhzkAAtyE3yTCyjaJ9Z');
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   const program = useProgram();
   const { connection } = useConnection();
-  const walletTokens = useWalletTokens();
 
   const [escrows, setEscrows] = useState<any[]>([]);
 
@@ -34,6 +31,7 @@ export default function Home() {
     if (program && signerPublicKey) {
       const init = async () => {
         const all_escrows = await program?.account.gifterEscrow.all();
+        console.log(all_escrows);
 
         setEscrows(all_escrows);
       };
@@ -47,8 +45,8 @@ export default function Home() {
   const handleCreate = async (
     mintA: PublicKey,
     mintB: PublicKey,
-    tokenGiveAmount: number,
-    tokenWantAmount: number,
+    depositAmount: number,
+    receiveAmount: number,
   ) => {
     if (signerPublicKey && program && connection) {
       await create_escrow(
@@ -56,8 +54,8 @@ export default function Home() {
         mintB,
         signerPublicKey,
         Math.floor(Math.random() * 1000),
-        tokenGiveAmount,
-        tokenWantAmount,
+        depositAmount,
+        receiveAmount,
         program,
         connection,
       );
@@ -72,11 +70,12 @@ export default function Home() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Creating Escrow</DialogTitle>
+            <DialogTitle className="font-bold underline underline-offset-2">
+              Creating Escrow
+            </DialogTitle>
             <TokenSelectionForm handleCreate={handleCreate} />
             <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              Your tokens will be deposited to the trusted vault.
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
@@ -91,7 +90,7 @@ export default function Home() {
               expected_mintB_price={Number(escrow.account.makerExpectedPrice)}
               mintA={escrow.account.mintA.toBase58()}
               mintB={escrow.account.mintB.toBase58()}
-              price={10}
+              price={Number(escrow.account.depositAmount) / 1e6}
             />
           );
         })}
