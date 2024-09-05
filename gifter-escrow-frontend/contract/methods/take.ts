@@ -88,12 +88,12 @@ const take = async (
 
     const blockhash = await connection.getLatestBlockhash();
     // Confirm the transaction
-    await connection.confirmTransaction({
+    const signature = await connection.confirmTransaction({
       blockhash: blockhash.blockhash,
       lastValidBlockHeight: blockhash.lastValidBlockHeight,
       signature: txHash,
     });
-    console.log(txHash);
+    return signature.value;
   } catch (error: any) {
     console.log(error);
     throw new Error(error?.message);

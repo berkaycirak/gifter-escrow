@@ -8,6 +8,7 @@ import { Escrow } from '@/types';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import useWalletTokens from '@/hooks/useWalletTokens';
 import TokenSelectionForm from '@/components/shared/TokenSelectionForm';
 
 export default function Home() {
@@ -49,7 +49,7 @@ export default function Home() {
     receiveAmount: number,
   ) => {
     if (signerPublicKey && program && connection) {
-      await create_escrow(
+      const createPromise = create_escrow(
         mintA,
         mintB,
         signerPublicKey,
@@ -59,6 +59,15 @@ export default function Home() {
         program,
         connection,
       );
+      toast.promise(createPromise, {
+        loading: 'Creating...',
+        success: (data) => {
+          if (data) {
+            return 'Successfuly created!';
+          }
+        },
+        error: 'An error occured',
+      });
     }
   };
 

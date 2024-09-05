@@ -15,6 +15,7 @@ import { truncateString } from '@/utils/truncateString';
 import { Button } from '../ui/button';
 import { getTokens } from '@/actions/getTokens';
 import { take } from '@/contract/methods/take';
+import { toast } from 'sonner';
 
 interface EscrowCardProps {
   price: number;
@@ -43,19 +44,28 @@ const EscrowCard = ({
 
   const handleCancel = async () => {
     if (wallet.publicKey && program && connection) {
-      await refund(
+      const refundPromise = refund(
         new PublicKey(mintA),
         wallet.publicKey,
         escrow_id,
         program,
         connection,
       );
+      toast.promise(refundPromise, {
+        loading: 'Refunding...',
+        success: (data) => {
+          if (data) {
+            return 'Successfuly refunded!';
+          }
+        },
+        error: 'An error occured',
+      });
     }
   };
 
   const handleAccept = async () => {
     if (wallet.publicKey && program && connection) {
-      await take(
+      const takePromise = take(
         new PublicKey(mintA),
         new PublicKey(mintB),
         new PublicKey(maker),
@@ -64,6 +74,15 @@ const EscrowCard = ({
         program,
         connection,
       );
+      toast.promise(takePromise, {
+        loading: 'Taking...',
+        success: (data) => {
+          if (data) {
+            return 'Successfuly taken!';
+          }
+        },
+        error: 'An error occured',
+      });
     }
   };
 
