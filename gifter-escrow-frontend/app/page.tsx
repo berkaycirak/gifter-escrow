@@ -1,5 +1,6 @@
 'use client';
 
+import { getWalletTokens } from '@/actions/getWalletTokens';
 import EscrowCard from '@/components/shared/EscrowCard';
 import { create_escrow } from '@/contract/methods/create';
 import useProgram from '@/hooks/useProgram';
@@ -21,19 +22,8 @@ export default function Home() {
     if (program && signerPublicKey) {
       const init = async () => {
         const all_escrows = await program?.account.gifterEscrow.all();
+        getWalletTokens(signerPublicKey.toBase58());
         setEscrows(all_escrows);
-        // const tx = await create_escrow(
-        //   mintA,
-        //   mintB,
-        //   signerPublicKey,
-        //   8,
-        //   5,
-        //   10,
-        //   program,
-        //   connection,
-        // );
-
-        // console.log(tx);
       };
 
       init();
@@ -41,6 +31,21 @@ export default function Home() {
   }, [program, signerPublicKey]);
 
   useEffect(() => {}, []);
+
+  const handleCreate = async () => {
+    if (signerPublicKey && program && connection) {
+      await create_escrow(
+        mintA,
+        mintB,
+        signerPublicKey,
+        2,
+        5,
+        10,
+        program,
+        connection,
+      );
+    }
+  };
 
   return (
     <main>
@@ -58,6 +63,8 @@ export default function Home() {
           />
         );
       })}
+
+      <button onClick={handleCreate}>Create</button>
     </main>
   );
 }

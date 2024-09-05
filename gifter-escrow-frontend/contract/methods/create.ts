@@ -1,6 +1,7 @@
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
+  getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 import {
@@ -19,8 +20,8 @@ import {
 import { GifterEscrow } from '../idl/gifter_escrow';
 
 const create_escrow = async (
-  mint_a: PublicKey,
-  mint_b: PublicKey,
+  mintA: PublicKey,
+  mintB: PublicKey,
   maker: PublicKey,
   escrow_id: number,
   deposit_amount: number,
@@ -29,26 +30,36 @@ const create_escrow = async (
   connection: Connection,
 ) => {
   try {
-    const maker_token_account_a = await getAssociatedTokenAddress(
-      mint_a,
+    // const makerTokenAccountA = await getAssociatedTokenAddress(
+    //   mintA,
+    //   maker,
+    //   true,
+    //   TOKEN_PROGRAM_ID,
+    // );
+    // const escrowVault = deriveEscrowVaultPDA(mintA);
+    // const gifterEscrowState = deriveGifterEscrowStatePDA(maker, escrow_id);
+
+    const gifterEscrowState = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('gifter_escrow'),
+        maker.toBuffer(),
+        new BN(escrow_id).toArrayLike(Buffer, 'le', 8),
+      ],
+      program.programId,
+    )[0];
+
+    const escrowVault = getAssociatedTokenAddressSync(
+      mintA,
+      gifterEscrowState,
+      true,
+      TOKEN_PROGRAM_ID,
+    );
+    const makerTokenAccountA = getAssociatedTokenAddressSync(
+      mintA,
       maker,
       true,
       TOKEN_PROGRAM_ID,
     );
-    const escrow_vault = deriveEscrowVaultPDA(mint_a);
-    const gifter_escrow_state = deriveGifterEscrowStatePDA(maker, escrow_id);
-
-    // const accounts = {
-    //     maker,
-    //     maker_token_account_a,
-    //     mint_a,
-    //     mint_b,
-    //     escrow_vault,
-    //     gifter_escrow_state,
-    //     token_program:TOKEN_PROGRAM_ID,
-    //     associated_token_program:ASSOCIATED_TOKEN_PROGRAM_ID,
-    //     systemProgram:SystemProgram.programId,
-    // }
 
     const txHash = await program.methods
       .createEscrow(
@@ -56,16 +67,21 @@ const create_escrow = async (
         new BN(deposit_amount * 1e6),
         new BN(maker_expected_price * 1e6),
       )
-      .accounts({
-        mintA: mint_a,
-        mintB: mint_b,
+      .accountsPartial({
+        escrowVault,
+        gifterEscrowState,
         maker,
+        makerTokenAccountA,
+        mintA,
+        mintB,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
       })
       .rpc();
 
     const blockhash = await connection.getLatestBlockhash();
-    const x = await connection.confirmTransaction({
+    await connection.confirmTransaction({
       blockhash: blockhash.blockhash,
       lastValidBlockHeight: blockhash.lastValidBlockHeight,
       signature: txHash,

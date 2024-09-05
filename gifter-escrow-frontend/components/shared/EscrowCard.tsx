@@ -39,8 +39,8 @@ const EscrowCard = ({
   return (
     <div className="rounded border-2 border-black">
       <p>{escrow_id}</p>
-      <p> {expected_mintB_price}</p>
-      <p> {mintA}</p>
+      <p> {expected_mintB_price / 1e6}</p>
+      <p>{mintA}</p>
       <p>{mintB}</p>
       <p> {price}</p>
       <p>{maker}</p>

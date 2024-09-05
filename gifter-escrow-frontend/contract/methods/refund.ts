@@ -1,6 +1,7 @@
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddress,
+  getAssociatedTokenAddressSync,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
@@ -20,14 +21,27 @@ const refund = async (
   connection: Connection,
 ) => {
   try {
-    const makerTokenAccountA = await getAssociatedTokenAddress(
+    const gifterEscrowState = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from('gifter_escrow'),
+        maker.toBuffer(),
+        new BN(escrow_id).toArrayLike(Buffer, 'le', 8),
+      ],
+      program.programId,
+    )[0];
+
+    const escrowVault = getAssociatedTokenAddressSync(
+      mintA,
+      gifterEscrowState,
+      true,
+      TOKEN_PROGRAM_ID,
+    );
+    const makerTokenAccountA = getAssociatedTokenAddressSync(
       mintA,
       maker,
       true,
       TOKEN_PROGRAM_ID,
     );
-    const escrowVault = deriveEscrowVaultPDA(mintA);
-    const gifterEscrowState = deriveGifterEscrowStatePDA(maker, escrow_id);
 
     const accounts = {
       maker,
