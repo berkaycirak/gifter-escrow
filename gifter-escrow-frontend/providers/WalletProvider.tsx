@@ -18,8 +18,6 @@ export const Wallet = ({ children }: { children: React.ReactNode }) => {
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
 
-  const connection = new Connection('', 'confirmed');
-
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={[]} autoConnect>
