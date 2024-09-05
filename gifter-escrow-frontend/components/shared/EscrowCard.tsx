@@ -58,8 +58,8 @@ const EscrowCard = ({
       await take(
         new PublicKey(mintA),
         new PublicKey(mintB),
-        wallet.publicKey,
         new PublicKey(maker),
+        wallet.publicKey,
         escrow_id,
         program,
         connection,
@@ -122,7 +122,7 @@ const EscrowCard = ({
               Cancel
             </Button>
           ) : (
-            <Button>Accept</Button>
+            <Button onClick={handleAccept}>Accept</Button>
           )}
         </CardFooter>
       </Card>

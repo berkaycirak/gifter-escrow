@@ -19,4 +19,5 @@ export const getWalletTokens = async (walletAddress: string) => {
   );
   const data = await response.data;
   console.log(data);
+  return data;
 };

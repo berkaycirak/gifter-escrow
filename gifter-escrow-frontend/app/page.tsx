@@ -17,6 +17,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import useWalletTokens from '@/hooks/useWalletTokens';
+import TokenSelectionForm from '@/components/shared/TokenSelectionForm';
 
 export default function Home() {
   const mintA = new PublicKey('7chEvNZDztDZYahhznCEgmuDVcmBEMtRZCKWVFAds78U');
@@ -24,6 +26,7 @@ export default function Home() {
   const { publicKey: signerPublicKey, sendTransaction } = useWallet();
   const program = useProgram();
   const { connection } = useConnection();
+  const walletTokens = useWalletTokens();
 
   const [escrows, setEscrows] = useState<any[]>([]);
 
@@ -31,7 +34,7 @@ export default function Home() {
     if (program && signerPublicKey) {
       const init = async () => {
         const all_escrows = await program?.account.gifterEscrow.all();
-        getWalletTokens(signerPublicKey.toBase58());
+
         setEscrows(all_escrows);
       };
 
@@ -41,15 +44,20 @@ export default function Home() {
 
   useEffect(() => {}, []);
 
-  const handleCreate = async () => {
+  const handleCreate = async (
+    mintA: PublicKey,
+    mintB: PublicKey,
+    tokenGiveAmount: number,
+    tokenWantAmount: number,
+  ) => {
     if (signerPublicKey && program && connection) {
       await create_escrow(
         mintA,
         mintB,
         signerPublicKey,
         Math.floor(Math.random() * 1000),
-        5,
-        10,
+        tokenGiveAmount,
+        tokenWantAmount,
         program,
         connection,
       );
@@ -58,8 +66,6 @@ export default function Home() {
 
   return (
     <main>
-      <button onClick={handleCreate}></button>
-
       <Dialog>
         <DialogTrigger className="mt-4" asChild>
           <Button>Create Escrow</Button>
@@ -67,12 +73,11 @@ export default function Home() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Creating Escrow</DialogTitle>
-            Token To Exchange <br /> Token To Get
+            <TokenSelectionForm handleCreate={handleCreate} />
             <DialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
             </DialogDescription>
-            <Button onClick={handleCreate}>Create</Button>
           </DialogHeader>
         </DialogContent>
       </Dialog>
