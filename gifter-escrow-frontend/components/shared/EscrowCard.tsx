@@ -86,7 +86,7 @@ const EscrowCard = ({
   }, []);
 
   return (
-    <div className="rounded border-2 border-black lg:max-w-md xl:max-w-lg">
+    <div className="rounded border-primary/30 lg:max-w-md xl:max-w-lg">
       <Card>
         <CardHeader>
           <CardTitle># {escrow_id}</CardTitle>

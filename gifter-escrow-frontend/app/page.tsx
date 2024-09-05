@@ -66,15 +66,17 @@ export default function Home() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
+            <DialogTitle>Creating Escrow</DialogTitle>
+            Token To Exchange <br /> Token To Get
             <DialogDescription>
               This action cannot be undone. This will permanently delete your
               account and remove your data from our servers.
             </DialogDescription>
+            <Button onClick={handleCreate}>Create</Button>
           </DialogHeader>
         </DialogContent>
       </Dialog>
-      <ul className="mt-4">
+      <ul className="mt-4 flex flex-wrap gap-2">
         {escrows.map((escrow) => {
           return (
             <EscrowCard
