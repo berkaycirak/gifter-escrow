@@ -38,7 +38,7 @@ describe('gifter-escrow', () => {
 	const program = anchor.workspace
 		.GifterEscrow as Program<GifterEscrow>;
 
-	const first_escrow_id = new BN(6);
+	const first_escrow_id = new BN(1);
 	const mint_a = new PublicKey(
 		'7chEvNZDztDZYahhznCEgmuDVcmBEMtRZCKWVFAds78U'
 	);
@@ -112,10 +112,7 @@ describe('gifter-escrow', () => {
 				new BN(0.5 * 1e6)
 			)
 			.accounts({
-				maker: maker.publicKey,
-				mintA: mint_a,
-				mintB: mint_b,
-				tokenProgram: TOKEN_PROGRAM_ID,
+				...accounts,
 			})
 			.rpc();
 		console.log('Your transaction signature', tx);
@@ -145,6 +142,5 @@ describe('gifter-escrow', () => {
 	});
 	it('read the escrows ', async () => {
 		const data = await program.account.gifterEscrow.all();
-		console.log(data);
 	});
 });
