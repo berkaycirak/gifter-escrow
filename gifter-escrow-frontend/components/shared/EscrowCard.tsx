@@ -86,7 +86,7 @@ const EscrowCard = ({
   }, []);
 
   return (
-    <div className="rounded border-primary/30 lg:max-w-md xl:max-w-lg">
+    <div className="min-w-[350px] rounded border-primary/30 lg:max-w-md xl:max-w-lg">
       <Card>
         <CardHeader>
           <CardTitle># {escrow_id}</CardTitle>
@@ -109,7 +109,7 @@ const EscrowCard = ({
             </span>
           </p>
           <p className="mt-4 text-sm font-bold text-primary">
-            Complete the process to get{' '}
+            Accept to get{' '}
             <span className="rounded bg-primary/30 px-2 py-1 font-bold text-black">
               GFT
             </span>{' '}
@@ -118,11 +118,13 @@ const EscrowCard = ({
         </CardContent>
         <CardFooter>
           {maker === wallet.publicKey?.toBase58() ? (
-            <Button className="bg-red-400" onClick={handleCancel}>
+            <Button className="w-full bg-red-400" onClick={handleCancel}>
               Cancel
             </Button>
           ) : (
-            <Button onClick={handleAccept}>Accept</Button>
+            <Button className="w-full" onClick={handleAccept}>
+              Accept
+            </Button>
           )}
         </CardFooter>
       </Card>
