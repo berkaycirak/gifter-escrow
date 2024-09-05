@@ -50,7 +50,7 @@ pub struct Create<'info>{
 impl<'info> Create<'info> {
 
     // That function is responsible to initialize gifter_escrow_state
-    pub fn initialize_gifter_escrow(&mut self,escrow_id:u64,maker_expected_price:u64,bump:u8)->Result<()>{
+    pub fn initialize_gifter_escrow(&mut self,escrow_id:u64,maker_expected_price:u64,deposit_amount:u64,bump:u8)->Result<()>{
         
         self.gifter_escrow_state.set_inner(GifterEscrow { 
             escrow_id, 
@@ -58,6 +58,7 @@ impl<'info> Create<'info> {
             maker: self.maker.key(), 
             mint_a: self.mint_a.key(), 
             mint_b: self.mint_b.key(), 
+            deposit_amount,
             bump
         });
         Ok(())

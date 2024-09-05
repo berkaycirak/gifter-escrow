@@ -8,6 +8,7 @@ pub struct GifterEscrow {
     pub maker: Pubkey, // the user that will initialize the escrow
     pub mint_a:Pubkey, // The mint address of a token that will be deposited to the escrow.
     pub mint_b:Pubkey, // The mint address of a token that will be transferred to the maker.
+    pub deposit_amount:u64,
     pub bump:u8, // Bump is crucial to find pda since it helps us to make optimization while deriving pda of that escrow state.
 }
 
@@ -15,6 +16,7 @@ impl Space for GifterEscrow {
     const INIT_SPACE: usize =  8 //discrimanator
     + 8 // escrow_id
     + 8 // maker_expected_price
+    + 8 // deposit amount
     + 32 // maker
     + 32 // mint_a
     + 32 // mint_b

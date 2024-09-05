@@ -5,10 +5,10 @@ resolution = true
 skip-lint = false
 
 [programs.devnet]
-gifter_escrow = "5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk"
+gifter_escrow = "9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf"
 
 [programs.localnet]
-gifter_escrow = "5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk"
+gifter_escrow = "9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf"
 
 [registry]
 url = "https://api.apr.dev"

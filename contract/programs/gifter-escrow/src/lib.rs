@@ -6,7 +6,7 @@ use context::*;
 mod state;
 use state::*;
 
-declare_id!("5Sbxcm5UTTyKMhB9sNvmSYCwF7FCNVm3wdZkf7fPhWTk");
+declare_id!("9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf");
 
 #[program]
 pub mod gifter_escrow {
@@ -17,7 +17,7 @@ pub mod gifter_escrow {
     pub fn create_escrow(ctx: Context<Create>,escrow_id:u64,deposit_amount:u64,maker_expected_price:u64) -> Result<()> {
         // init escrow (initing accounts)
 
-        ctx.accounts.initialize_gifter_escrow(escrow_id, maker_expected_price, ctx.bumps.gifter_escrow_state)?;
+        ctx.accounts.initialize_gifter_escrow(escrow_id, maker_expected_price,deposit_amount, ctx.bumps.gifter_escrow_state)?;
 
         // deposit to vault
         ctx.accounts.deposit_to_escrow_vault(deposit_amount)?;
