@@ -27,9 +27,9 @@ The idea is to engage for more people into our platform. In Future plans, those 
 
 ### <ins>Framework Stack
 
-| Contract | Anchor |
-| Backend | Typescript |
-| Frontend | Nextjs |
+| Contract --> Anchor |
+| Backend --> Typescript |
+| Frontend --> Nextjs |
 
 An **indexer** for that project is written by `Typescript` and deployed to the `AWS EC2`. That indexer listens the RPC nodes and after a `completeEscrow` event is emitted from our program, a reward logic that transfers reward token for both maker and taker is run. You can check the source code of that indexer from that [link](https://github.com/berkaycirak/gifter-escrow-indexer)
 
