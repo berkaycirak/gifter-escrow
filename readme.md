@@ -7,16 +7,15 @@ That is a web3 platform in which people can exchange their tokens and collect re
 > [!NOTE]
 > Program ID: `9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf ` program is live on devnet.
 
-> [!IMPORTANT]
-> **Helius** RPC Nodes are used in that platform for better performance.
+> [!IMPORTANT] > `Helius` RPC Nodes are used in that platform for better performance.
 
 ### Reward Token
 
-In that platform, **10 million GFT** token is supplied for users and after each completed escrow, platform gives **1 GFT** for both users (dealers for the --> maker-taker)
+In that platform, `10 million GFT` token is supplied for users and after each completed escrow, platform gives `1 GFT` for both users (dealers for the --> maker-taker)
 
-The idea is to engage for more people into our platform. In Future plans, those **GFT** tokens will be monetized and useful on our platform for some utilities.
+The idea is to engage for more people into our platform. In Future plans, those `GFT` tokens will be monetized and useful on our platform for some utilities.
 
-### User Stories
+### <sub>User Stories<sub>
 
 - As a user, I can create an escrow to exchange my tokens
 - As a user, I can cancel my escrow by refunding tokens
