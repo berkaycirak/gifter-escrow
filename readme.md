@@ -2,16 +2,16 @@
 
 That is a web3 platform in which people can exchange their tokens and collect rewards after exchange.
 
+![platform](platform.png)
+
 ---
 
 > [!NOTE]
 > Program ID: `9HP45DvSvMRNmb7KQTDnujtv49oDVNEEH8VCFTmdb5yf ` program is live on devnet.
 
-> [!IMPORTANT]
-> `Helius` RPC Nodes are used in that platform for better performance.
+> [!IMPORTANT] > `Helius` RPC Nodes are used in that platform for better performance.
 
-> [!WARNING]
-> `API Keys` are visible on the repos. Since it is for just a test development, I don't need to collect them in an environment.
+> [!WARNING] > `API Keys` are visible on the repos. Since it is for just a test development, I don't need to collect them in an environment.
 
 ### <ins>Reward Token
 
