@@ -6,16 +6,24 @@ import React from 'react';
 
 const useWalletTokens = () => {
   const { publicKey: walletAddress } = useWallet();
+  const ownerAddress = walletAddress?.toBase58();
 
   const fetchWalletTokens = async () => {
+    const dasUrl = process.env.NEXT_PUBLIC_HELIUS_DAS_URL;
+    if (!dasUrl) {
+      throw new Error('NEXT_PUBLIC_HELIUS_DAS_URL is not set');
+    }
+    if (!ownerAddress) {
+      return {};
+    }
     const response = await axios.post(
-      'https://devnet.helius-rpc.com/?api-key=8c2c9f64-3f11-4ff3-9909-2defbecc4447',
+      dasUrl,
       {
         jsonrpc: '2.0',
         id: '',
         method: 'getAssetsByOwner',
         params: {
-          ownerAddress: walletAddress,
+          ownerAddress,
           page: 1,
           limit: 100,
           options: {
@@ -34,8 +42,9 @@ const useWalletTokens = () => {
   };
 
   const { data } = useQuery({
-    queryKey: ['walletTokens', walletAddress?.toBase58],
+    queryKey: ['walletTokens', ownerAddress],
     queryFn: fetchWalletTokens,
+    enabled: !!ownerAddress,
   });
 
   console.log(data);
