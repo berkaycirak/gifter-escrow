@@ -66,7 +66,6 @@ impl<'info> Take<'info> {
 
     // First, taker will send mint_b to the maker token account
     pub fn send_to_maker(&mut self)->Result<()>{
-        println!("Hello");
          // Since the spl-token transfer will be handled here, our escrow program needs to invoke spl-token program's transfer method. Here _cpi_ is occuring.
 
          let accounts = TransferChecked {
