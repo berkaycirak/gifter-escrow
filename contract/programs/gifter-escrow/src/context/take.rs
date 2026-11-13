@@ -44,8 +44,10 @@ pub struct Take<'info>{
     #[account(
         mut,
         close=taker,
-        seeds=[b"gifter_escrow",maker.key().as_ref(),gifter_escrow_state.escrow_id.to_le_bytes().as_ref()], // One maker can have multiple escrows on the platform, so we pass escrow_id to the seeds also (little endian ).
-        bump=gifter_escrow_state.bump
+        // Do not put to_le_bytes() in seeds = [] (dangling pointer, 0x10008) and do not
+        // call create_program_address here (blows the 32KB heap, 0x300008010). Check the
+        // PDA in the handler with owned locals.
+        constraint = gifter_escrow_state.maker == maker.key(),
     )]
     pub gifter_escrow_state:Box<Account<'info,GifterEscrow>>,
     #[account(
@@ -93,11 +95,17 @@ impl<'info> Take<'info> {
         };
 
         // Since vault is a PDA instead of a wallet account, we should create a context using new_with_signer.
-        let escrow_id=self.gifter_escrow_state.escrow_id.to_le_bytes();
-        let bump=[self.gifter_escrow_state.bump];
-        let signer_seeds= [&[b"gifter_escrow",self.maker.to_account_info().key.as_ref(),&escrow_id.as_ref(),&bump][..]];
+        let maker_key = self.maker.key();
+        let escrow_id = self.gifter_escrow_state.escrow_id.to_le_bytes();
+        let bump = [self.gifter_escrow_state.bump];
+        let expected = Pubkey::create_program_address(
+            &[b"gifter_escrow", maker_key.as_ref(), escrow_id.as_ref(), &bump],
+            &crate::ID,
+        ).map_err(|_| error!(anchor_lang::error::ErrorCode::ConstraintSeeds))?;
+        require_keys_eq!(expected, self.gifter_escrow_state.key());
+        let signer_seeds = [&[b"gifter_escrow", maker_key.as_ref(), escrow_id.as_ref(), &bump][..]];
 
-        let cpi_context = CpiContext::new_with_signer(self.token_program.to_account_info(), accounts,&signer_seeds);
+        let cpi_context = CpiContext::new_with_signer(self.token_program.to_account_info(), accounts, &signer_seeds);
         
         // All mint_a token amount on the vault will be transferred to the taker.
         transfer_checked(cpi_context, self.escrow_vault.amount, self.mint_a.decimals)?;

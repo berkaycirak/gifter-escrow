@@ -21,8 +21,10 @@ pub struct Refund<'info>{
     #[account(
         mut,
         close=maker, // escrow state account will be closed and rent will be payed to the maker
-        seeds=[b"gifter_escrow",maker.key().as_ref(),gifter_escrow_state.escrow_id.to_le_bytes().as_ref()], // To find related PDA with escrow state account
-        bump = gifter_escrow_state.bump
+        // Do not put to_le_bytes() in seeds = [] (dangling pointer, 0x10008) and do not
+        // call create_program_address here (blows the 32KB heap, 0x300008010). Check the
+        // PDA in the handler with owned locals.
+        constraint = gifter_escrow_state.maker == maker.key(),
     )]
     pub gifter_escrow_state:Account<'info,GifterEscrow>,
     #[account(
@@ -52,11 +54,17 @@ impl<'info> Refund<'info> {
 
         // Since vault is a PDA instead of a wallet account, we should create a context using new_with_signer.
 
+        let maker_key = self.maker.key();
         let seed = self.gifter_escrow_state.escrow_id.to_le_bytes();
         let bump = [self.gifter_escrow_state.bump];
-        let signer_seeds = [&[b"gifter_escrow", self.maker.to_account_info().key.as_ref(), seed.as_ref(), &bump][..]];
+        let expected = Pubkey::create_program_address(
+            &[b"gifter_escrow", maker_key.as_ref(), seed.as_ref(), &bump],
+            &crate::ID,
+        ).map_err(|_| error!(anchor_lang::error::ErrorCode::ConstraintSeeds))?;
+        require_keys_eq!(expected, self.gifter_escrow_state.key());
+        let signer_seeds = [&[b"gifter_escrow", maker_key.as_ref(), seed.as_ref(), &bump][..]];
 
-        let cpi_context = CpiContext::new_with_signer(self.token_program.to_account_info(), accounts,&signer_seeds);
+        let cpi_context = CpiContext::new_with_signer(self.token_program.to_account_info(), accounts, &signer_seeds);
         
         // All mint_a token amount on the vault will be refunded.
         transfer_checked(cpi_context, self.escrow_vault.amount, self.mint_a.decimals)?;
